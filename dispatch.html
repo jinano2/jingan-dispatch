@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><body>
+車:<select id='u'><option>3811</option><option>3812</option><option>5035</option><option>5067</option><option>5073</option><option>5076</option></select><br>
+地址:<input id='ad'><br>病患:<input id='pt'><br>備註:<input id='nt'><br>
+<button onclick='send()'>送出</button><p id='m'></p>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBnLIrV8XiB6zIuWxTsruSKuxOR-XYsLyk",
+  authDomain: "jingan-ems.firebaseapp.com",
+  databaseURL: "https://jingan-ems-default-rtdb.firebaseio.com",
+  projectId: "jingan-ems",
+  storageBucket: "jingan-ems.firebasestorage.app",
+  messagingSenderId: "510776214516",
+  appId: "1:510776214516:web:7f9cbb734f69c2d40b6fa1",
+  measurementId: "G-NZZZ3XPF58"
+};
+firebase.initializeApp(firebaseConfig);
+function send(){
+ let u=document.getElementById('u').value;
+ let d={time:new Date().toLocaleString(), address:ad.value, patient:pt.value, note:nt.value};
+ firebase.database().ref("units/"+u).set(d);
+ m.innerText="已派遣 "+u;
+}
+</script></body></html>

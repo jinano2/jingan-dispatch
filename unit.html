@@ -1,0 +1,40 @@
+<!DOCTYPE html><html><body>
+<h2 id='t1'></h2>
+時間:<span id='t2'></span><br>
+地址:<span id='a'></span><br>
+病患:<span id='p'></span><br>
+備註:<span id='n'></span><br>
+<audio id='al' src='alert.wav'></audio>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBnLIrV8XiB6zIuWxTsruSKuxOR-XYsLyk",
+  authDomain: "jingan-ems.firebaseapp.com",
+  databaseURL: "https://jingan-ems-default-rtdb.firebaseio.com",
+  projectId: "jingan-ems",
+  storageBucket: "jingan-ems.firebasestorage.app",
+  messagingSenderId: "510776214516",
+  appId: "1:510776214516:web:7f9cbb734f69c2d40b6fa1",
+  measurementId: "G-NZZZ3XPF58"
+};
+firebase.initializeApp(firebaseConfig);
+let unit=new URLSearchParams(location.search).get("unit");
+document.getElementById('t1').innerText=unit+" 勤務";
+let lastAddress=null;
+firebase.database().ref("units/"+unit).on("value", function(snap){
+ let d=snap.val(); if(!d) return;
+ document.getElementById('t2').innerText=d.time;
+ document.getElementById('a').innerText=d.address;
+ document.getElementById('p').innerText=d.patient;
+ document.getElementById('n').innerText=d.note;
+ document.getElementById('al').play();
+ if(d.address && d.address !== lastAddress){
+   lastAddress=d.address;
+   setTimeout(function(){
+     window.location.href="https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(d.address);
+   },800);
+ }
+});
+</script>
+</body></html>
